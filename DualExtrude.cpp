@@ -285,7 +285,7 @@ int ConvFile(char *infile, char *outfile)
 			{ // Got one!
 				// The following is derived from "Dual Extrude Both Extruders at Once for Replicator"
 				// from user thorstadg on thingiverse.com
-				if ('E' == Token[0])  // Check for 'E'
+				if ('E' == Token[0] || 'A' == Token[0] || 'B' == Token[0])  // Check for 'E', 'A' or 'B'
 				{
 					if (strlen(Token) > 15)  // Check for parameter that fits in buffer
 					{
@@ -314,18 +314,18 @@ int ConvFile(char *infile, char *outfile)
 						NewE = ((CurrentE - FirstE) * Ratio) + FirstE;
 
 						// Round to the nearest .001
-						NewE = floor((NewE * 1000.0) + 0.5);
-						NewE = NewE / 1000.0;
+						NewE = floor((NewE * 100000.0) + 0.5);
+						NewE = NewE / 100000.0;
 
 						if (RightUsed)  // Check witch one is the new one
 						{
 							// Replace with A/B
-							sprintf(buf+strlen(buf)," A%s B%.3f", Token+1, NewE);
+							sprintf(buf+strlen(buf)," B%.5f A%s", NewE, Token+1);
 						}
 						else
 						{
 							// Replace with A/B
-							sprintf(buf+strlen(buf)," A%.3f B%s", NewE, Token+1);
+							sprintf(buf+strlen(buf)," A%.5f B%s", NewE, Token+1);
 						}
 					}
 					else
